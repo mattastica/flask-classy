@@ -93,8 +93,6 @@ class FlaskView(object):
             cls.orig_trailing_slash = cls.trailing_slash
             cls.trailing_slash = trailing_slash
 
-        self.injector = injector
-
         members = get_interesting_members(FlaskView, cls)
         special_methods = ["get", "put", "patch", "post", "delete", "index"]
 
