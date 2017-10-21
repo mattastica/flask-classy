@@ -49,11 +49,10 @@ class FlaskView(object):
     route_base = None
     route_prefix = None
     trailing_slash = True
-    injector_modules = []
 
     @classmethod
     def register(cls, app, route_base=None, subdomain=None, route_prefix=None,
-                 trailing_slash=None):
+                 trailing_slash=None, injector=None):
         """Registers a FlaskView class for use with a specific instance of a
         Flask app. Any methods not prefixes with an underscore are candidates
         to be routed and will have routes registered when this method is
@@ -94,12 +93,13 @@ class FlaskView(object):
             cls.orig_trailing_slash = cls.trailing_slash
             cls.trailing_slash = trailing_slash
 
+        self.injector = injector
 
         members = get_interesting_members(FlaskView, cls)
         special_methods = ["get", "put", "patch", "post", "delete", "index"]
 
         for name, value in members:
-            proxy = cls.make_proxy_method(name)
+            proxy = cls.make_proxy_method(name, injector)
             route_name = cls.build_route_name(name)
             try:
                 if hasattr(value, "_rule_cache") and name in value._rule_cache:
@@ -173,7 +173,10 @@ class FlaskView(object):
         """
 
 
-        i = injector.get(cls)
+        if injector:
+            i = cls()
+        else:
+            i = injector.get(cls)
         view = getattr(i, name)
 
         if cls.decorators:
