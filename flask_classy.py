@@ -172,9 +172,10 @@ class FlaskView(object):
 
 
         if injector:
-            i = cls()
-        else:
             i = injector.get(cls)
+        else:
+            i = cls()
+
         view = getattr(i, name)
 
         if cls.decorators:
