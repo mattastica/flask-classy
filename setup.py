@@ -21,7 +21,7 @@ setup(
     platforms='any',
     install_requires=[
         'Flask>=0.9',
-        'injector=0.12.1'
+        'injector==0.12.1'
     ],
     classifiers=[
         'Environment :: Web Environment',
