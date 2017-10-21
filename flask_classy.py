@@ -49,6 +49,7 @@ class FlaskView(object):
     route_base = None
     route_prefix = None
     trailing_slash = True
+    injector_modules = []
 
     @classmethod
     def register(cls, app, route_base=None, subdomain=None, route_prefix=None,
@@ -163,7 +164,7 @@ class FlaskView(object):
 
 
     @classmethod
-    def make_proxy_method(cls, name):
+    def make_proxy_method(cls, name, injector):
         """Creates a proxy function that can be used by Flasks routing. The
         proxy instantiates the FlaskView subclass and calls the appropriate
         method.
@@ -171,7 +172,8 @@ class FlaskView(object):
         :param name: the name of the method to create a proxy for
         """
 
-        i = cls()
+
+        i = injector.get(cls)
         view = getattr(i, name)
 
         if cls.decorators:
@@ -276,7 +278,6 @@ class FlaskView(object):
         """
         return cls.__name__ + ":%s" % method_name
 
-
 def get_interesting_members(base_class, cls):
     """Returns a list of methods that can be routed to"""
 
@@ -318,9 +319,3 @@ def get_true_argspec(method):
 
 class DecoratorCompatibilityError(Exception):
     pass
-
-
-
-
-
-

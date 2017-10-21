@@ -1,4 +1,4 @@
-Flask-Classy
+Flask-Classy (Inject)
 =============
 
 .. module:: flask.ext.classy
@@ -48,7 +48,7 @@ Install the extension with::
     $ pip install flask-classy
 
 or if you're kickin' it old-school::
-    
+
     $ easy_install flask-classy
 
 Let's see how it works
