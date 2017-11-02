@@ -97,7 +97,7 @@ class FlaskView(object):
         special_methods = ["get", "put", "patch", "post", "delete", "index"]
 
         for name, value in members:
-            proxy = cls.make_proxy_method(name, injector)
+            proxy = cls.make_proxy_method(name, injector, app)
             route_name = cls.build_route_name(name)
             try:
                 if hasattr(value, "_rule_cache") and name in value._rule_cache:
@@ -162,7 +162,7 @@ class FlaskView(object):
 
 
     @classmethod
-    def make_proxy_method(cls, name, injector):
+    def make_proxy_method(cls, name, injector, app):
         """Creates a proxy function that can be used by Flasks routing. The
         proxy instantiates the FlaskView subclass and calls the appropriate
         method.
@@ -175,6 +175,8 @@ class FlaskView(object):
             i = injector.get(cls)
         else:
             i = cls()
+
+        i.app = app
 
         view = getattr(i, name)
 
